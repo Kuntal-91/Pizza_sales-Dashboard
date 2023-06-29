@@ -1,0 +1,67 @@
+Pizza Sales Analysis: Data Cleaning and Dashboard Creation
+
+
+Overview
+In this project, I performed an in-depth analysis of pizza sales using a Kaggle dataset. 
+I utilized SQL for data cleaning and manipulation and then created a dynamic dashboard in Excel to visualize key insights and trends.
+
+Key Steps:
+Data Cleaning: Leveraging my SQL skills, I conducted comprehensive data cleaning operations on the pizza sales dataset. 
+This involved handling missing values, removing duplicates, standardizing formats, and resolving any inconsistencies.
+
+Exploratory Data Analysis: After cleaning the data, I performed exploratory data analysis using SQL queries to gain a deeper understanding of the dataset. 
+I derived meaningful metrics such as top-selling pizzas, popular toppings, peak sales periods, and customer preferences.
+Dashboard Creation: To present the findings effectively, I utilized Excel's powerful features to design an interactive dashboard. The dashboard incorporated various charts, graphs, and slicers to provide an intuitive visualization of the pizza sales data. Users can explore different dimensions, filter data, and observe trends in real-time.
+
+Insights and Recommendations: Based on the analysis, I derived actionable insights that can aid pizza businesses in making informed decisions. These insights covered areas such as optimizing menu offerings, identifying target customer segments, and planning promotional campaigns.
+
+Technologies Used:
+SQL (MySQL)
+Excel (including PivotTables, Charts, and Conditional Formatting)
+Results:
+Through this project, I successfully cleaned and analyzed the pizza sales dataset, uncovering valuable insights into customer preferences and sales trends. 
+The Excel dashboard I created provides an interactive platform for stakeholders to visualize and explore the data effortlessly.
+
+below are the sql queries is used for KPI in my excel dashboard
+1. Total Revenue:
+SELECT SUM(total_price) AS Total_Revenue FROM pizza_sales;
+
+2. Average Order Value
+SELECT (SUM(total_price) / COUNT(DISTINCT order_id)) AS Avg_order_Value FROM pizza_sales
+
+3. Total Pizzas Sold
+SELECT SUM(quantity) AS Total_pizza_sold FROM pizza_sales
+
+4. Total Orders
+SELECT COUNT(DISTINCT order_id) AS Total_Orders FROM pizza_sales
+
+5. Average Pizzas Per Order
+SELECT CAST(CAST(SUM(quantity) AS DECIMAL(10,2)) / 
+CAST(COUNT(DISTINCT order_id) AS DECIMAL(10,2)) AS DECIMAL(10,2))
+AS Avg_Pizzas_per_order
+FROM pizza_sales
+
+I also calculated the daily trends suing sql below are the queries i used for findimg daily trend
+
+!. Daily Trend for Total Orders
+SELECT DATENAME(DW, order_date) AS order_day, COUNT(DISTINCT order_id) AS total_orders 
+FROM pizza_sales
+GROUP BY DATENAME(DW, order_date)
+
+2.Hourly Trend for Orders
+SELECT DATEPART(HOUR, order_time) as order_hours, COUNT(DISTINCT order_id) as total_orders
+from pizza_sales
+group by DATEPART(HOUR, order_time)
+order by DATEPART(HOUR, order_time)
+
+3.% of Sales by Pizza Category
+SELECT pizza_category, CAST(SUM(total_price) AS DECIMAL(10,2)) as total_revenue,
+CAST(SUM(total_price) * 100 / (SELECT SUM(total_price) from pizza_sales) AS DECIMAL(10,2)) AS PCT
+FROM pizza_sales
+GROUP BY pizza_category
+
+4.% of Sales by Pizza Size
+SELECT pizza_size, CAST(SUM(total_price) AS DECIMAL(10,2)) as total_revenue,
+CAST(SUM(total_price) * 100 / (SELECT SUM(total_price) from pizza_sales) AS DECIMAL(10,2)) AS PCT
+FROM pizza_sales
+
